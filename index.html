@@ -27,7 +27,9 @@
               class="form-control"
               required
             />
-            <div class="invalid-feedback">Informe um valor  válido. Ex: 100,00</div>
+            <div class="invalid-feedback">
+              Informe um valor válido. Ex: 100,00
+            </div>
           </div>
           <div class="mb-3">
             <label for="installments" class="form-label">Parcelas</label>
@@ -77,15 +79,19 @@
       });
 
       function calculateInstallments() {
-        const amount = parseFloat(form.elements.amount.value.replace(',', '.'));
+        const amount = parseFloat(form.elements.amount.value.replace(",", "."));
         const installments = parseInt(form.elements.installments.value);
 
         let installmentValue = parseFloat(amount / installments);
-        installmentValue = formatNumber(installmentValue)
+        installmentValue = formatNumber(installmentValue);
 
         const results = document.querySelector("#results");
         results.classList.add("mt-5");
         results.innerHTML = "";
+
+        const hr = document.createElement("hr");
+        results.appendChild(hr);
+        hr.classList.add("mb-5");
 
         const h5 = document.createElement("h5");
         results.appendChild(h5);
@@ -93,25 +99,26 @@
 
         const ul = document.createElement("ul");
         results.appendChild(ul);
-        ul.classList.add('list-group');
+        ul.classList.add("list-group");
 
-        let total = 0.00;
+        let total = 0.0;
 
         for (let i = 1; i <= installments; i++) {
           total += installmentValue;
 
           if (i === installments && amount > total) {
-              installmentValue += amount - total
+            installmentValue += amount - total;
           }
 
           const li = document.createElement("li");
           ul.appendChild(li);
           li.innerText = `Parcela ${i}`;
-          const span = document.createElement('span');
+          const span = document.createElement("span");
           li.appendChild(span);
-          span.className = 'badge bg-primary rounded-pill';
+          span.className = "badge bg-primary rounded-pill";
           span.innerText = `${toCurrency(installmentValue)}`;
-          li.className = 'list-group-item d-flex justify-content-between align-items-center';
+          li.className =
+            "list-group-item d-flex justify-content-between align-items-center";
         }
       }
 
@@ -123,9 +130,14 @@
       }
 
       function formatNumber(value) {
-        const int = Math.trunc(value)
-        const dec = Math.trunc((value - int) * 100)
-        return parseFloat(`${int}.${dec}`)
+        const int = Math.trunc(value);
+        let dec = Math.trunc((value - int) * 100);
+
+        if (dec < 10) {
+          dec = `0${dec}`;
+        }
+
+        return parseFloat(`${int}.${dec}`);
       }
     </script>
   </body>
